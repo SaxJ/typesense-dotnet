@@ -45,6 +45,17 @@ public class TypesenseClient : ITypesenseClient
         return HandleEmptyStringJsonSerialize<CollectionResponse>(response);
     }
 
+    public async Task<SchemaUpdate> UpdateCollection(string collectionName, SchemaUpdate schemaUpdate)
+    {
+        if (schemaUpdate is null)
+            throw new ArgumentNullException(nameof(schemaUpdate));
+        if (string.IsNullOrWhiteSpace(collectionName))
+            throw new ArgumentException("cannot be null empty or whitespace", nameof(collectionName));
+
+        var response = await Patch($"/collections/{collectionName}", schemaUpdate).ConfigureAwait(false);
+        return HandleEmptyStringJsonSerialize<SchemaUpdate>(response);
+    }
+
     public async Task<T> CreateDocument<T>(string collection, T document) where T : class
     {
         if (string.IsNullOrWhiteSpace(collection))

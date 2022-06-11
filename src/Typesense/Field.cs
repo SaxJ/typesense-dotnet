@@ -4,7 +4,12 @@ using Typesense.Converter;
 
 namespace Typesense;
 
-public record Field
+public interface IField
+{
+    public string Name { get; }
+}
+
+public record Field : IField
 {
     [JsonPropertyName("name")]
     public string Name { get; init; }
@@ -108,5 +113,18 @@ public record Field
                 return FieldType.AutoString;
             default: throw new ArgumentException($"Could not map field type with value '{fieldType}'", nameof(fieldType));
         }
+    }
+}
+
+public record DroppedField : IField
+{
+    [JsonPropertyName("name")]
+    public string Name { get; init; }
+    [JsonPropertyName("name")]
+    public bool Drop = true;
+
+    public DroppedField(string name)
+    {
+        Name = name;
     }
 }
