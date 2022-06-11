@@ -1,14 +1,21 @@
 using System.Text.Json.Serialization;
 
-namespace Typesense
+namespace Typesense;
+
+public record ImportResponse
 {
-    public record ImportResponse
+    [JsonPropertyName("success")]
+    public bool Success { get; init; }
+    [JsonPropertyName("error")]
+    public string? Error { get; init; }
+    [JsonPropertyName("document")]
+    public string? Document { get; init; }
+
+    [JsonConstructor]
+    public ImportResponse(bool success, string? error = null, string? document = null)
     {
-        [JsonPropertyName("success")]
-        public bool Success { get; init; }
-        [JsonPropertyName("error")]
-        public string Error { get; init; }
-        [JsonPropertyName("document")]
-        public string Document { get; init; }
+        Success = success;
+        Error = error;
+        Document = document;
     }
 }

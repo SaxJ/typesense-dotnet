@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+namespace Typesense.Converter;
+
 public class JsonStringEnumConverter<TEnum> : JsonConverter<TEnum> where TEnum : struct, System.Enum
 {
     private readonly Dictionary<TEnum, string> _enumToString = new Dictionary<TEnum, string>();
@@ -39,17 +41,20 @@ public class JsonStringEnumConverter<TEnum> : JsonConverter<TEnum> where TEnum :
     public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var stringValue = reader.GetString();
+        if (stringValue is null)
+            throw new InvalidOperationException($"Received null value from {nameof(reader)}.");
 
         if (_stringToEnum.TryGetValue(stringValue, out var enumValue))
-        {
             return enumValue;
-        }
 
         return default;
     }
 
     public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
     {
+        if (writer is null)
+            throw new ArgumentNullException(nameof(writer));
+
         writer.WriteStringValue(_enumToString[value]);
     }
 }

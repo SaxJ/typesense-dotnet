@@ -1,9 +1,9 @@
-namespace Typesense
+namespace Typesense;
+
+public enum ImportType
 {
-    public enum ImportType
-    {
-        Create,
-        Upsert,
-        Update
-    }
+    Create,
+    Upsert,
+    Update,
+    Emplace
 }
